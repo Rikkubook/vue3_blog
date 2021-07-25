@@ -1,9 +1,9 @@
 <template>
   <Header></Header>
-  <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-  <h1 class="red-color">erwerewr</h1>
-   <router-link class="nav-link" to="/login">Login</router-link>
-  <router-view/>
+  <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
+  <h1 class="red-color">erwerewr</h1> -->
+   <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
+  <router-view />
 </template>
 
 <script lang="ts">
