@@ -31,7 +31,7 @@
 
 <script lang="ts">
 // import { Navbar } from 'bootstrap'
-import { ref, defineComponent } from 'vue'
+import { ref, Ref, defineComponent } from 'vue'
 export default defineComponent({
   name: 'Header',
   props: {
@@ -41,7 +41,7 @@ export default defineComponent({
     }
   },
   setup: () => {
-    const count = ref(0)
+    const count:Ref<number> = ref(0)
     return { count }
   }
 })
