@@ -4,13 +4,30 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('../views/index.vue'),
+    component: () => import('@/views/index.vue'),
   },
   {
     path: '/hello',
     name: 'Helloworld',
-    component: () => import('../views/Login.vue'),
+    component: () => import('@/views/Login.vue'),
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login.vue'),
+  },
+  {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('@/views/Admin.vue'),
+    children: [
+      {
+        path: '/',
+        name: 'Admin-Home',
+        component: () => import('@/views/Admin/AdminHome.vue'),
+      }
+    ]
+  }
 ];
 
 export default createRouter({
