@@ -34,8 +34,8 @@ export default defineComponent({
 
             let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
  
-            data.data.data.forEach( data => {
-                 console.log(data.content.substring(0,150))
+            data.data.data.forEach( (data: { content: string; }) => {
+                console.log(data.content.substring(0,150))
                 articles.push(data);
             });
             
