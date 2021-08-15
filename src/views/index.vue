@@ -8,7 +8,7 @@
           <div class="text-center">{{subContent(art.content)}}</div>
         </article>
       </div>
-      <!-- <SideBar :articles="articles"></SideBar> -->
+      <SideBar :articles="articles"></SideBar>
         <!-- {{articles}} -->
     </div>
 
@@ -44,10 +44,14 @@ export default defineComponent({
             }
         });
 
-        const subContent = (content) => {
+        const subContent = (content:String) => {
             return content.substring(0,150)
         };
-        return {articles, subContent};
+
+        const routerToArticle = (id:number)=>{
+          return this.$router.push({name:'Article',params:{id:id}})
+        }
+        return {articles, routerToArticle, subContent};
     }
 })
 </script>
