@@ -1,13 +1,13 @@
 <template>
-    <div>
+    <secction class="d-block  container">
         <table class="table">
             <thead>
                 <tr>
-                    <th scope="col">編號</th>
-                    <th scope="col">文章標題</th>
-                    <th scope="col">文章內容</th>
-                    <th scope="col">上傳日期</th>
-                    <th scope="col">修改</th>
+                    <th width="5%">編號</th>
+                    <th width="25%">文章標題</th>
+                    <th width="45%">文章內容</th>
+                    <th width="15%">上傳日期</th>
+                    <th width="10%">修改</th>
                 </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                 </tr>
             </tbody>
         </table>
-    </div>
+    </secction>
 </template>
 
 
@@ -37,13 +37,18 @@ import { useRouter } from "vue-router"
 import axios from 'axios'
 import dayjs from 'dayjs'
 
-interface Articles extends Array<object>{ // 擴展原本 Array 否則 push 會沒吃到
-    [index: number]: object ;
+
+// interface Articles extends Array<obj>{ // 擴展原本 Array 否則 push 會沒吃到
+//     [index: number]: obj ;
+// }
+
+interface Articles extends Array<ArticlesItem>{ // 擴展原本 Array 否則 push 會沒吃到
+    [index: number]: ArticlesItem ;
 }
 
-// interface ArticlesItem {
-//     content: string
-// }
+interface ArticlesItem {
+    content: string
+}
 
 // https://stackoverflow.com/questions/34859406/typescript-push-not-available-on-interface-array
 
@@ -60,7 +65,7 @@ export default defineComponent({
         onMounted( async () => {
             try{
                 let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-                Articles.data.data.forEach( (data:object) => {
+                Articles.data.data.forEach( (data:ArticlesItem) => {
                     // console.log(data.content.substring(0,150))
                     return articles.push(data);
                 });
@@ -71,10 +76,10 @@ export default defineComponent({
         });
 
         const router = useRouter();
-        const  editArticle =  function(id:number){
+        const  editArticle =  (id:number) => {
             router.push({name: 'Admin-Edit',params:{id:id}})
         }
-        const  delArticle = function(id:Number){
+        const  delArticle = (id:Number) => {
             const ensure = confirm("請問是否要刪除這篇文章")
             if(ensure){
                 // this.deleteArticle(id)
@@ -82,7 +87,7 @@ export default defineComponent({
         }
         // filter
         const subContent = computed(() =>{  //TODO: 可以整合進API? 輸出時或是在拷貝一個來整理？
-            let contents = articles.map((item) => {  return item.content.substring(0,80)+'...'})
+            let contents = articles.map((item:ArticlesItem) => {  return item.content.substring(0,80)+'...'})
             return contents
         });
         // dayjs
