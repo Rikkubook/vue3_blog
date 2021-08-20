@@ -19,21 +19,21 @@
 <script lang="ts">
 
 import { onMounted, reactive, ref, Ref, defineComponent } from 'vue'
-// import SideBar from '../components/SideBar'
+import SideBar from '../components/SideBar.vue'
 import axios from 'axios'
 
 export default defineComponent({
     name: 'Home',
-//   components: {
-//     SideBar
-//   },
+    components: {
+      SideBar
+    },
     setup() {
         const articles = reactive([]);
         onMounted( async () => {
             try{
 
             let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
- 
+
             data.data.data.forEach( data => {
                  console.log(data.content.substring(0,150))
                 articles.push(data);
@@ -52,8 +52,12 @@ export default defineComponent({
 })
 </script>
 
-<style scoped>
-    .backColor{
-        background-color: #e3ded8
-    }
+<style lang="scss" scoped>
+  .article{
+    @include _bg;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-height: 200px;
+}
 </style>
