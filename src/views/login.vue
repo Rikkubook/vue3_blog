@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <secction class="d-block  container">
     <form class="login">
       <div class="mb-3">
         {{ form.account }}
@@ -15,7 +15,7 @@
         Submit
       </button>
     </form>
-  </div>
+  </secction>
 </template>
 
 <script lang="ts">

@@ -8,7 +8,7 @@
           <div class="text-center">{{subContent(art.content)}}</div>
         </article>
       </div>
-      <!-- <SideBar :articles="articles"></SideBar> -->
+      <SideBar :articles="articles"></SideBar>
         <!-- {{articles}} -->
     </div>
 
@@ -33,9 +33,9 @@ export default defineComponent({
             try{
 
             let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-
-            data.data.data.forEach( data => {
-                 console.log(data.content.substring(0,150))
+ 
+            data.data.data.forEach( (data: { content: string; }) => {
+                console.log(data.content.substring(0,150))
                 articles.push(data);
             });
             
@@ -44,10 +44,14 @@ export default defineComponent({
             }
         });
 
-        const subContent = (content) => {
+        const subContent = (content:String) => {
             return content.substring(0,150)
         };
-        return {articles, subContent};
+
+        const routerToArticle = (id:number)=>{
+          return this.$router.push({name:'Article',params:{id:id}})
+        }
+        return {articles, routerToArticle, subContent};
     }
 })
 </script>
