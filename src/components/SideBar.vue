@@ -11,17 +11,27 @@
     </div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+
+import { defineComponent } from 'vue'
+
+import { useRouter } from "vue-router"
+export default defineComponent({
     props: {
         articles: Array
     },
-    methods:{
-        routerToArticle: function(id){
-            this.$router.push({name:'Article',params:{id:id}})
+
+    setup() {
+        const router = useRouter();
+
+        const routerToArticle = (id:string)=>{
+          return router.push({name:'Article',params:{id:id}})
         }
+        return {routerToArticle};
+
     }
-}
+
+})
 </script>
 
 <style lang="scss" scoped>

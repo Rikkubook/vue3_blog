@@ -51,7 +51,7 @@ export default defineComponent({
 
         const router = useRouter();
 
-        const routerToArticle = (id:number)=>{
+        const routerToArticle = (id:string)=>{
           return router.push({name:'Article',params:{id:id}})
         }
         return {articles, routerToArticle, subContent};
