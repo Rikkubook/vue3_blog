@@ -4,3 +4,14 @@
   padding: 8px 10px;
   min-width: 120px;
 }
+
+.pu-buttonsGroup{
+  display: block;
+  text-align: center;
+  button{
+    display: inline-block;
+  }
+  button:first-child{
+    margin-right: 10px;
+  }
+}
