@@ -1,6 +1,7 @@
 <template>
     <secction class="d-block container">
         <form class="login">
+          {{formData}}
           <div class="mb-3">
             <label for="pageTitle" class="form-label">輸入文章標題</label>
             <input type="text" class="form-control" id="pageTitle">
@@ -9,15 +10,76 @@
             <label for="pageContent" class="form-label">文章內容</label>
             <textarea type="textarea" class="form-control" id="pageContent"  rows="10" max-rows="10"/>
           </div>
-          <button type="submit" class="btn btn-outline-primary" @click="resetFormData">重設</button>
-          <button type="submit" class="btn btn-primary" @click="submitFormData">送出</button>
+          <div class="pu-buttonsGroup">
+            <button type="submit" class="btn btn-outline-primary  pu-button" @click="resetFormData">重設</button>
+            <button type="submit" class="btn btn-primary  pu-button" @click="submitFormData">送出</button>
+          </div>
         </form>
     </secction>
 </template>
 
-<script>
-// import{ mapState, mapActions ,mapGetters } from 'vuex'
+<script lang="ts">
+import{ onMounted, ref, Ref, reactive, defineComponent } from 'vue'
+import { useRoute } from "vue-router"
 
+import axios from 'axios'
+import dayjs from 'dayjs'
+
+interface ArticlesItem{
+    banner: string,
+    content: string,
+    date:number, 
+    id: string,
+    title:string, 
+}
+
+interface Articles extends Array<ArticlesItem>{ //  擴展原本 Array 否則 push 會沒吃到
+    [index: number]: ArticlesItem ;
+}
+export default defineComponent({
+    setup() {
+      const route = useRoute()
+
+      let mode:Ref<string> = ref('add')
+      let formData = reactive({
+        title: "" as string,
+        date: 0 as number,
+        content: "" as string,
+      });
+      const thisAccount = ref(null)
+      let filterById:Object  = reactive({}); // 定義
+      const articles:Articles = reactive([]); // 定義
+
+      onMounted(async () => {
+        if(route.name ==="Admin-Edit"){
+            const id = route.params.id
+            mode = ref('edit')
+            console.log(id)
+            //並調度changeFocusId改變 focusIdㄙ
+            try{
+                let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
+                await Articles.data.data.forEach( (data:ArticlesItem) => {
+                    // console.log(data.content.substring(0,150))
+                    return articles.push(data);
+                });
+                formData = {
+                    title: articles.filter(art=> art.id === id)[0].title,
+                    date: articles.filter(art=> art.id === id)[0].date,
+                    content: articles.filter(art=> art.id === id)[0].content,
+                }
+                console.log(formData)
+            } catch(error){
+                console.log(error)
+            }
+        }
+        console.log(formData)
+        // thisAccount = this.$store.state.account
+        console.log(route.name)
+      })
+
+      return {mode, formData, articles, filterById}
+    }
+})
 // export default {
 //     mounted (){
 //         if(this.$route.name ==="Admin-Edit"){
@@ -28,17 +90,6 @@
 //             this.$store.dispatch('changeFocusId',id)
 //         }
 //         this.thisAccount = this.$store.state.account
-//     },
-//     data (){
-//         return{
-//             mode: 'add',
-//             formData:{
-//                 title: "",
-//                 date: "",
-//                 content: ""
-//             },
-//             thisAccount: 'null'
-//         }
 //     },
 //     computed:{
 //         ...mapState(['account','articlesChange']),

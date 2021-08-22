@@ -37,17 +37,12 @@ import { useRouter } from "vue-router"
 import axios from 'axios'
 import dayjs from 'dayjs'
 
-
-// interface Articles extends Array<obj>{ // 擴展原本 Array 否則 push 會沒吃到
-//     [index: number]: obj ;
-// }
-
-interface Articles extends Array<ArticlesItem>{ // 擴展原本 Array 否則 push 會沒吃到
-    [index: number]: ArticlesItem ;
-}
-
 interface ArticlesItem {
     content: string
+}
+
+interface Articles extends Array<ArticlesItem>{ //  擴展原本 Array 否則 push 會沒吃到
+    [index: number]: ArticlesItem ;
 }
 
 // https://stackoverflow.com/questions/34859406/typescript-push-not-available-on-interface-array
@@ -55,13 +50,14 @@ interface ArticlesItem {
 export default defineComponent({
     setup() {
         const fields = reactive([
-                {key: 'title', label: '文章標題'},
-                {key: 'date', label: '上傳日期'},
-                {key: 'content', label: '文章內容'},
-                {key: 'id', label: '修改'}
+            {key: 'title', label: '文章標題'},
+            {key: 'date', label: '上傳日期'},
+            {key: 'content', label: '文章內容'},
+            {key: 'id', label: '修改'}
         ]);
         // 方法
         const articles:Articles = reactive([]); // 定義
+        
         onMounted( async () => {
             try{
                 let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
@@ -79,7 +75,7 @@ export default defineComponent({
         const  editArticle =  (id:number) => {
             router.push({name: 'Admin-Edit',params:{id:id}})
         }
-        const  delArticle = (id:Number) => {
+        const  delArticle = (id:number) => {
             const ensure = confirm("請問是否要刪除這篇文章")
             if(ensure){
                 // this.deleteArticle(id)
