@@ -21,6 +21,7 @@
 import { onMounted, reactive, ref, Ref, defineComponent } from 'vue'
 import SideBar from '../components/SideBar.vue'
 import axios from 'axios'
+import { useRouter } from "vue-router"
 
 export default defineComponent({
     name: 'Home',
@@ -48,8 +49,10 @@ export default defineComponent({
             return content.substring(0,150)
         };
 
+        const router = useRouter();
+
         const routerToArticle = (id:number)=>{
-          return this.$router.push({name:'Article',params:{id:id}})
+          return router.push({name:'Article',params:{id:id}})
         }
         return {articles, routerToArticle, subContent};
     }

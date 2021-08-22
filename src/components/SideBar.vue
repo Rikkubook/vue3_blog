@@ -23,3 +23,10 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" scoped>
+.sideBar{
+    @include _bg;
+    height:  calc( 100% - 16px);
+}
+</style>
