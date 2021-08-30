@@ -41,10 +41,6 @@ interface ArticlesItem {
     content: string
 }
 
-interface Articles extends Array<ArticlesItem>{ //  擴展原本 Array 否則 push 會沒吃到
-    [index: number]: ArticlesItem ;
-}
-
 // https://stackoverflow.com/questions/34859406/typescript-push-not-available-on-interface-array
 
 export default defineComponent({
@@ -55,9 +51,9 @@ export default defineComponent({
             {key: 'content', label: '文章內容'},
             {key: 'id', label: '修改'}
         ]);
-        // 方法
-        const articles:Articles = reactive([]); // 定義
-        
+        const articles:any = reactive([]); // 定義
+        const router = useRouter();
+
         onMounted( async () => {
             try{
                 let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
@@ -65,13 +61,12 @@ export default defineComponent({
                     // console.log(data.content.substring(0,150))
                     return articles.push(data);
                 });
-
             } catch(error){
                 console.log(error);
             }
         });
 
-        const router = useRouter();
+
         const  editArticle =  (id:number) => {
             router.push({name: 'Admin-Edit',params:{id:id}})
         }
