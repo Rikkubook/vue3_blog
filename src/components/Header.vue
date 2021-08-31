@@ -40,38 +40,23 @@ import { useRouter, useRoute } from "vue-router";
 export default defineComponent({
   name: 'Header',
   props: {
-    msg: String
+    msg: String,
+    login: Boolean
   },
   setup() {
-    const login:boolean = ref(false);
     const router = useRouter()
-
-    onMounted( async () => {
-      // firebase.auth().onAuthStateChanged(function(user) {
-      //   if(user) {
-      //     console.log(user);
-      //     login.value = true;
-      //     console.log('login',true)
-      //   } else {
-      //     // 使用者未登入
-      //     login.value = false;
-      //     console.log('login',false)
-      //   }
-      // })
-    })
 
     const signOut = () => {
       firebase.auth().signOut()
       .then(function() {
         // 登出後強制重整一次頁面
-        login.value = false;
-        router.push({name:"Home"})
+        return router.push({name:"Home"})
       }).catch(function(error) {
         console.log(error.message)
       });
     }
 
-    return {login, signOut}
+    return {signOut}
   }
 })
 </script>

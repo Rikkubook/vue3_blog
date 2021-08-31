@@ -1,5 +1,5 @@
 <template>
-  <Header></Header>
+  <Header :login="login"></Header>
   <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
   <h1 class="red-color">erwerewr</h1> -->
    <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
@@ -7,7 +7,7 @@
 </template>
 
 <script lang="ts">
-import { onMounted, defineComponent } from 'vue'
+import { onMounted, ref, defineComponent } from 'vue'
 import Header from './components/Header.vue'
 
 
@@ -17,7 +17,7 @@ export default defineComponent({
     Header
   },
     setup() {
-
+      const login:boolean = ref(false);
       onMounted( async () => {
                   // 初始化 Firebase
           var config = {
@@ -34,8 +34,21 @@ export default defineComponent({
         //storage 開始
           //……………………………………………………………………..
           var storage = firebase.storage();
-      });
 
+          firebase.auth().onAuthStateChanged(function(user) { 
+            // 不能丟到header? https://ithelp.ithome.com.tw/articles/10206354
+            if(user) {
+              console.log(user);
+              login.value = true;
+              console.log('login',true)
+            } else {
+              // 使用者未登入
+              login.value = false;
+              console.log('login',false)
+            }
+          })
+      });
+      return {login}
     }
 })
 </script>
