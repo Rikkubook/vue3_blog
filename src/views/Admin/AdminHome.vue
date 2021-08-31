@@ -11,7 +11,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(articleItem,index) in articles" :key="articleItem.id">
+                <tr v-for="(articleItem,index) in articles.data" :key="articleItem.id">
                     <th scope="row">{{ index+1 }}</th>
                     <td>{{ articleItem.title }}</td>
                     <td>{{ subContent[index] }}</td>
@@ -51,34 +51,51 @@ export default defineComponent({
             {key: 'content', label: '文章內容'},
             {key: 'id', label: '修改'}
         ]);
-        const articles:any = reactive([]); // 定義
+        const articles:any = reactive({data:[]}); // 定義
         const router = useRouter();
 
         onMounted( async () => {
             try{
-                let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-                Articles.data.data.forEach( (data:ArticlesItem) => {
-                    // console.log(data.content.substring(0,150))
-                    return articles.push(data);
-                });
+                const db = firebase.database();
+                const msgRef = db.ref("messages");
+                // msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
+                //   Object.values(snapshot.val()).forEach((item)=>{
+                //     console.log(item);
+                //     articles.push(item)
+                //   })
+                //   console.log(snapshot.val());
+                // })
+                msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
+                  articles.data = Object.values(snapshot.val())
+                })
+                // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
+                // Articles.data.data.forEach( (data:ArticlesItem) => {
+                //     // console.log(data.content.substring(0,150))
+                //     return articles.push(data);
+                // });
             } catch(error){
                 console.log(error);
             }
         });
 
 
-        const  editArticle =  (id:number) => {
+        const  editArticle =  (id:string) => {
             router.push({name: 'Admin-Edit',params:{id:id}})
         }
-        const  delArticle = (id:number) => {
+        const  delArticle = (id:string) => {
+          console.log(id)
             const ensure = confirm("請問是否要刪除這篇文章")
             if(ensure){
-                // this.deleteArticle(id)
+                console.log(id)
+                const db = firebase.database();
+                const msgRef =  db.ref(`messages/${id}`)
+                msgRef.remove()
+                // articles.splice(0, articles.length); //不會取代掉
             }
         }
         // filter
         const subContent = computed(() =>{  //TODO: 可以整合進API? 輸出時或是在拷貝一個來整理？
-            let contents = articles.map((item:ArticlesItem) => {  return item.content.substring(0,80)+'...'})
+            let contents = articles.data.map((item:ArticlesItem) => {  return item.content?.substring(0,80)+'...'})
             return contents
         });
         // dayjs

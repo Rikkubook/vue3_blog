@@ -53,14 +53,23 @@ export default defineComponent({
             const id = route.params.id
             mode.value = 'edit'
             try{
-                let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-                await Articles.data.data.forEach( (data:ArticlesItem) => {
-                    return articles.push(data);
-                });
-                    formData.title = articles.filter(art=> art.id === id)[0].title
-                    formData.date = articles.filter(art=> art.id === id)[0].date
-                    formData.content = articles.filter(art=> art.id === id)[0].content
-                    formData.id = route.params.id
+
+                const db = firebase.database();
+                const msgRef = db.ref("messages");
+                await msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
+                  Object.values(snapshot.val()).forEach((item)=>{
+                    console.log(item);
+                    articles.push(item)
+                  })
+                })
+                // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
+                // await Articles.data.data.forEach( (data:ArticlesItem) => {
+                //     return articles.push(data);
+                // });
+                formData.title = articles.filter(art=> art.id === id)[0].title
+                formData.date = articles.filter(art=> art.id === id)[0].date
+                formData.content = articles.filter(art=> art.id === id)[0].content
+                formData.id = route.params.id
             } catch(error){
                 console.log(error)
             }
@@ -71,22 +80,24 @@ export default defineComponent({
       const submitFormData = () =>{
         formData.date = new Date().getTime()
         if (mode.value==='edit'){
-            //帶兩個參數與變數
-            updateArticles(formData.id, formData)
+            updateArticles()
         } else{
             addArticles()
         }
       }
-      const updateArticles =(id:string|string[], form:object) =>{
-        console.log(id, form)
-        // 成功
+      const updateArticles =() =>{
+        const db = firebase.database();
+        const msgRef = db.ref(`messages/${route.params.id}`); // update 修改
+        msgRef.update(formData)
         router.push({name: 'Admin-Home'})
       }
       const addArticles = () => {
-        const ID = Math.random()*1000
-        let id ="newArticles" +ID
-        formData.id = id
-        console.log(formData)
+        const db = firebase.database();
+        const msgRef = db.ref("messages");
+        const key = msgRef.push().key; //會用firebase 產生隨機的key
+        formData.id = key
+        msgRef.child(key).set(formData) //可以用child or 相對路徑
+        router.push({name: 'Admin-Home'})
       }
 
       return {articles, formData, mode, submitFormData}
