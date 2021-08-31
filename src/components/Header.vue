@@ -16,8 +16,11 @@
           <li class="nav-item">
             <router-link class="nav-link" to="/">Article</router-link>
           </li>
-          <li class="nav-item">
+          <li v-show="!login" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li v-show="login" class="nav-item">
+            <a class="nav-link" href="javaScript:;" @click="signOut()">SignOut</a>
           </li>
         </ul>
         <form class="d-flex">
@@ -31,11 +34,44 @@
 
 <script lang="ts">
 // import { Navbar } from 'bootstrap'
-import { defineComponent } from 'vue'
+import { onMounted, ref, defineComponent } from 'vue'
+import { useRouter, useRoute } from "vue-router";
+
 export default defineComponent({
   name: 'Header',
   props: {
     msg: String
+  },
+  setup() {
+    const login:boolean = ref(false);
+    const router = useRouter()
+
+    onMounted( async () => {
+      // firebase.auth().onAuthStateChanged(function(user) {
+      //   if(user) {
+      //     console.log(user);
+      //     login.value = true;
+      //     console.log('login',true)
+      //   } else {
+      //     // 使用者未登入
+      //     login.value = false;
+      //     console.log('login',false)
+      //   }
+      // })
+    })
+
+    const signOut = () => {
+      firebase.auth().signOut()
+      .then(function() {
+        // 登出後強制重整一次頁面
+        login.value = false;
+        router.push({name:"Home"})
+      }).catch(function(error) {
+        console.log(error.message)
+      });
+    }
+
+    return {login, signOut}
   }
 })
 </script>

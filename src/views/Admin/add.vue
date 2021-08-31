@@ -85,7 +85,7 @@ export default defineComponent({
             addArticles()
         }
       }
-      const updateArticles =() =>{
+      const updateArticles = () =>{
         const db = firebase.database();
         const msgRef = db.ref(`messages/${route.params.id}`); // update 修改
         msgRef.update(formData)

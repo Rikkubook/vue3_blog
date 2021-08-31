@@ -18,8 +18,8 @@
                     <td>{{ dateFormatDash(articleItem.date) }}</td>
                     <td>
                         <div class="btn-group" role="group" aria-label="Basic example">
-                        <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
-                        <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
+                          <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
+                          <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
                         </div>
                     </td>
                 </tr>
@@ -56,6 +56,8 @@ export default defineComponent({
 
         onMounted( async () => {
             try{
+                // const user = firebase.auth().currentUser;
+                // console.log(user.email)
                 const db = firebase.database();
                 const msgRef = db.ref("messages");
                 // msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
