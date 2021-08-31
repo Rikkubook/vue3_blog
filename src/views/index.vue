@@ -29,7 +29,7 @@ export default defineComponent({
       SideBar
     },
     setup() {
-        const articles = reactive([]);
+        const articles:any = reactive([]);
         onMounted( async () => {
             try{
 

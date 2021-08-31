@@ -37,6 +37,8 @@
 import { onMounted, ref, defineComponent } from 'vue'
 import { useRouter, useRoute } from "vue-router";
 
+declare const firebase: any;
+
 export default defineComponent({
   name: 'Header',
   props: {
@@ -51,7 +53,7 @@ export default defineComponent({
       .then(function() {
         // 登出後強制重整一次頁面
         return router.push({name:"Home"})
-      }).catch(function(error) {
+      }).catch(function(error: { status: number, message: string }) {
         console.log(error.message)
       });
     }

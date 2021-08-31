@@ -12,7 +12,7 @@
             </thead>
             <tbody>
                 <tr v-for="(articleItem,index) in articles.data" :key="articleItem.id">
-                    <th scope="row">{{ index+1 }}</th>
+                    <th scope="row">{{ index + 1 }}</th>
                     <td>{{ articleItem.title }}</td>
                     <td>{{ subContent[index] }}</td>
                     <td>{{ dateFormatDash(articleItem.date) }}</td>
@@ -36,6 +36,8 @@ import { useRouter } from "vue-router"
 
 import axios from 'axios'
 import dayjs from 'dayjs'
+
+declare const firebase: any;
 
 interface ArticlesItem {
     content: string
@@ -67,7 +69,7 @@ export default defineComponent({
                 //   })
                 //   console.log(snapshot.val());
                 // })
-                msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
+                msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
                   articles.data = Object.values(snapshot.val())
                 })
                 // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');

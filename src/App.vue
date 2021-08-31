@@ -10,6 +10,7 @@
 import { onMounted, ref, defineComponent } from 'vue'
 import Header from './components/Header.vue'
 
+declare const firebase: any;
 
 export default defineComponent({
   name: 'App',
@@ -17,7 +18,7 @@ export default defineComponent({
     Header
   },
     setup() {
-      const login:boolean = ref(false);
+      const login = ref(false);
       onMounted( async () => {
                   // 初始化 Firebase
           var config = {
@@ -35,7 +36,7 @@ export default defineComponent({
           //……………………………………………………………………..
           var storage = firebase.storage();
 
-          firebase.auth().onAuthStateChanged(function(user) { 
+          firebase.auth().onAuthStateChanged(function(user:any) { 
             // 不能丟到header? https://ithelp.ithome.com.tw/articles/10206354
             if(user) {
               console.log(user);

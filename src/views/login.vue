@@ -24,6 +24,7 @@
       <button class="btn btn-primary pu-button" @click.prevent="submitAccount()">
         Submit
       </button>
+      <a v-if="mode ==='login' " href="javaScript:;" class="float-end">forgetPassword</a>
     </form>
   </secction>
 </template>
@@ -31,6 +32,8 @@
 <script lang="ts">
 import { onMounted, ref, reactive, defineComponent, watch  } from 'vue'
 import { useRouter, useRoute } from "vue-router";
+
+declare const firebase: any;
 
 export default defineComponent({
   // defineComponent
@@ -42,7 +45,7 @@ export default defineComponent({
     //  引入route
     const router = useRouter()
     const route = useRoute()
-    const mode:string = ref('login')
+    const mode = ref('login')
 
     onMounted( async () => {
       if(route.name ==="Register"){
@@ -62,19 +65,19 @@ export default defineComponent({
 
     const submitAccount = () => {
       if (mode.value==='register'){
-          firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then(result => {
+          firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then((result:object) => {
           console.log(result)
           alert('註冊成功')
-        }).catch(function(error) {
+        }).catch(function(error: { status: number, message: string }) {
           console.log(error.message)
           alert(error.message)
         });
       } else {
-        firebase.auth().signInWithEmailAndPassword(form.email, form.password).then(result => {
+        firebase.auth().signInWithEmailAndPassword(form.email, form.password).then((result:object) => {
           console.log(result)
           alert('登入成功')
           router.push({name:"Admin-Home"})
-        }).catch(function(error) {
+        }).catch(function(error: { status: number, message: string }) {
           console.log(error.message)
           alert(error.message)
         });

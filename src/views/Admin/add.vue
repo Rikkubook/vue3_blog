@@ -24,6 +24,8 @@ import { useRoute, useRouter } from "vue-router"
 import axios from 'axios'
 import dayjs from 'dayjs'
 
+declare const firebase: any;
+
 interface ArticlesItem{
     banner: string,
     content: string,
@@ -31,9 +33,7 @@ interface ArticlesItem{
     id: string,
     title:string, 
 }
-interface Articles extends Array<ArticlesItem>{ //  擴展原本 Array 否則 push 會沒吃到
-    [index: number]: ArticlesItem ;
-}
+
 export default defineComponent({
     setup() {
       const route = useRoute()
@@ -45,7 +45,7 @@ export default defineComponent({
         content: "" as string,
         id: "" as string | string[]
       });
-      const articles:Articles = reactive([]); // 定義
+      const articles:any = reactive({data:[]});// 定義
 
 
       onMounted(async () => {
@@ -56,19 +56,16 @@ export default defineComponent({
 
                 const db = firebase.database();
                 const msgRef = db.ref("messages");
-                await msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
-                  Object.values(snapshot.val()).forEach((item)=>{
-                    console.log(item);
-                    articles.push(item)
-                  })
+                await msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
+                  articles.data = Object.values(snapshot.val())
                 })
                 // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
                 // await Articles.data.data.forEach( (data:ArticlesItem) => {
                 //     return articles.push(data);
                 // });
-                formData.title = articles.filter(art=> art.id === id)[0].title
-                formData.date = articles.filter(art=> art.id === id)[0].date
-                formData.content = articles.filter(art=> art.id === id)[0].content
+                formData.title = articles.filter((art:ArticlesItem) => art.id === id)[0].title
+                formData.date = articles.filter((art:ArticlesItem) => art.id === id)[0].date
+                formData.content = articles.filter((art:ArticlesItem) => art.id === id)[0].content
                 formData.id = route.params.id
             } catch(error){
                 console.log(error)
@@ -99,8 +96,11 @@ export default defineComponent({
         msgRef.child(key).set(formData) //可以用child or 相對路徑
         router.push({name: 'Admin-Home'})
       }
+      const resetFormData = () => {
+        console.log('resetFormData')
+      }
 
-      return {articles, formData, mode, submitFormData}
+      return {articles, formData, mode, submitFormData, resetFormData}
     }
 })
 </script>
