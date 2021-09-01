@@ -4,12 +4,17 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/index.vue'),
+    component: () => import('@/views/Home.vue'),
   },
   {
-    path: '/hello',
-    name: 'Helloworld',
-    component: () => import('@/views/Login.vue'),
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/About.vue'),
+  },
+  {
+    path: '/article:id',
+    name: 'Article',
+    component: () => import('@/views/Article.vue'),
   },
   {
     path: '/login',
@@ -20,11 +25,6 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('@/views/Login.vue'),
-  },
-  {
-    path: '/article:id',
-    name: 'Article',
-    component: () => import('@/views/Article.vue'),
   },
   {
     path: '/admin',
@@ -47,6 +47,11 @@ const routes = [
         component: () => import('@/views/Admin/Add.vue'),
       }
     ]
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound404',
+    component: () => import('@/views/NotFound404.vue'),
   }
 ];
 

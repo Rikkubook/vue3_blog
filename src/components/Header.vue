@@ -11,10 +11,10 @@
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link" to="/">About</router-link>
+            <router-link class="nav-link" to="/about">About</router-link>
           </li>
-          <li class="nav-item">
-            <router-link class="nav-link" to="/">Article</router-link>
+          <li v-show="login" class="nav-item">
+            <router-link class="nav-link" to="/admin">Admin</router-link>
           </li>
           <li v-show="!login" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>

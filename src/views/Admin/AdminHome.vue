@@ -3,24 +3,22 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th width="5%">編號</th>
-                    <th width="25%">文章標題</th>
-                    <th width="45%">文章內容</th>
-                    <th width="15%">上傳日期</th>
-                    <th width="10%">修改</th>
+                  <th width="30%">文章標題</th>
+                  <th width="45%">文章內容</th>
+                  <th width="15%">上傳日期</th>
+                  <th width="10%">修改</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(articleItem,index) in articles.data" :key="articleItem.id">
-                    <th scope="row">{{ index + 1 }}</th>
+                <tr v-for="articleItem in articles.data" :key="articleItem.id">
                     <td>{{ articleItem.title }}</td>
                     <td>{{ subContent[index] }}</td>
                     <td>{{ dateFormatDash(articleItem.date) }}</td>
                     <td>
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                          <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
-                          <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
-                        </div>
+                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
+                        <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
+                      </div>
                     </td>
                 </tr>
             </tbody>
