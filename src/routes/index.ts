@@ -19,12 +19,12 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login.vue'),
+    component: () => import('@/views/login.vue'),
   },
   {
     path: '/register',
     name: 'Register',
-    component: () => import('@/views/Login.vue'),
+    component: () => import('@/views/login.vue'),
   },
   {
     path: '/admin',
@@ -39,12 +39,12 @@ const routes = [
       {
         path: 'edit/:id',
         name: 'Admin-Edit',
-        component: () => import('@/views/Admin/Add.vue'),
+        component: () => import('@/views/Admin/add.vue'),
       },
       {
         path: 'add',
         name: 'Admin-Add',
-        component: () => import('@/views/Admin/Add.vue'),
+        component: () => import('@/views/Admin/add.vue'),
       }
     ]
   },
