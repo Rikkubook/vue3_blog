@@ -2,7 +2,7 @@
   <div class="home container-fluid">
     <div class="row mt-3">
       <div class=" col-12 col-md-9 order-1 order-md-0">
-        <article class="article backColor mb-3" v-for="(art,index) in articles" :key="index">
+        <article class="article backColor mb-3" v-for="(art,index) in articles" :key="art.id">
           <h3 @click="routerToArticle(art.id)" class="pointer">{{art.title}}</h3>
           <i class="date mb-2">{{art.date}}</i>
           <div class="text-center">{{subContent(art.content)}}</div>

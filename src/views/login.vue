@@ -12,7 +12,6 @@
     </div>
     <form class="login">
       <div class="mb-3">
-        {{ form.account }}
         <label for="account" class="form-label">Account</label>
         <input type="email" class="form-control" id="account" aria-describedby="accountHelp" placeholder="Enter account" v-model="form.email">
         <div id="accountHelp" class="form-text">Enter your email</div>
@@ -57,6 +56,7 @@ import { onMounted, ref, reactive, defineComponent, watch  } from 'vue'
 import { useRouter, useRoute } from "vue-router";
 
 declare const firebase: any;
+declare const bootstrap: any;
 
 export default defineComponent({
   // defineComponent
@@ -117,7 +117,7 @@ export default defineComponent({
           const truck_modal = document.querySelector('#exampleModal')
           const modal = bootstrap.Modal.getInstance(truck_modal)
           modal.hide()
-      }).catch((error) => {
+      }).catch((error: { status: number, message: string }) => {
         alert(error)
       })
     }

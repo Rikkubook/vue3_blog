@@ -10,7 +10,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="articleItem in articles.data" :key="articleItem.id">
+                <tr v-for="(articleItem,index) in articles.data" :key="articleItem.id">
                     <td>{{ articleItem.title }}</td>
                     <td>{{ subContent[index] }}</td>
                     <td>{{ dateFormatDash(articleItem.date) }}</td>

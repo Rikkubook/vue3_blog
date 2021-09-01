@@ -13,16 +13,21 @@
 
 <script lang="ts">
 
-import { defineComponent } from 'vue'
-
+import { defineComponent, PropType } from 'vue'
 import { useRouter } from "vue-router"
+
+interface Articles {
+	title: string,
+	id: string
+}
+
 export default defineComponent({
     props: {
-        articles: Array
+        articles: Array as PropType<Array<Articles>>
     },
 
     setup() {
-        const router = useRouter();
+        const router = useRouter()
 
         const routerToArticle = (id:string)=>{
           return router.push({name:'Article',params:{id:id}})
