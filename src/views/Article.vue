@@ -40,7 +40,6 @@ export default defineComponent({
 
             //先取得全部資料
             let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-
             data.data.data.forEach( (dataItem: ArticlesItem) => {
                 if(dataItem.id === artId){
                     

@@ -1,8 +1,8 @@
 <template>
-  <Header :login="login"></Header>
+  <Header v-if="firebaseInit"></Header>
   <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
   <h1 class="red-color">erwerewr</h1> -->
-   <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
+  <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
   <router-view />
 </template>
 
@@ -18,9 +18,9 @@ export default defineComponent({
     Header
   },
     setup() {
-      const login = ref(false);
+      const firebaseInit = ref<boolean>(false)
       onMounted( async () => {
-                  // 初始化 Firebase
+          // 初始化 Firebase
           var config = {
             apiKey: "AIzaSyBBQDoSuNjRt5ljHSi9LEPTCEodpCyBp3A",
             authDomain: "vue3blog-e3980.firebaseapp.com",
@@ -31,25 +31,13 @@ export default defineComponent({
             appId: "1:232656049:web:54eb54860152a516722690",
             measurementId: "G-2YYHXLQDSF"
           };
-          firebase.initializeApp(config);
-        //storage 開始
+          await firebase.initializeApp(config);
+          firebaseInit.value = true
+          // console.log(firebaseInit.value )
+          //storage 開始
           //……………………………………………………………………..
-          var storage = firebase.storage();
-
-          firebase.auth().onAuthStateChanged(function(user:any) { 
-            // 不能丟到header? https://ithelp.ithome.com.tw/articles/10206354
-            if(user) {
-              console.log(user);
-              login.value = true;
-              console.log('login',true)
-            } else {
-              // 使用者未登入
-              login.value = false;
-              console.log('login',false)
-            }
-          })
       });
-      return {login}
+      return {firebaseInit}
     }
 })
 </script>

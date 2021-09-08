@@ -3,10 +3,10 @@
         <table class="table">
             <thead>
                 <tr>
-                  <th width="30%">文章標題</th>
-                  <th width="45%">文章內容</th>
-                  <th width="15%">上傳日期</th>
-                  <th width="10%">修改</th>
+                    <th width="30%">文章標題</th>
+                    <th width="45%">文章內容</th>
+                    <th width="15%">上傳日期</th>
+                    <th width="10%">修改</th>
                 </tr>
             </thead>
             <tbody>
@@ -15,10 +15,10 @@
                     <td>{{ subContent[index] }}</td>
                     <td>{{ dateFormatDash(articleItem.date) }}</td>
                     <td>
-                      <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn-group" role="group" aria-label="Basic example">
                         <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
                         <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
-                      </div>
+                        </div>
                     </td>
                 </tr>
             </tbody>
@@ -68,7 +68,8 @@ export default defineComponent({
                 //   console.log(snapshot.val());
                 // })
                 msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
-                  articles.data = Object.values(snapshot.val())
+                    console.log(snapshot.val())
+                    articles.data = Object.values(snapshot.val())
                 })
                 // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
                 // Articles.data.data.forEach( (data:ArticlesItem) => {
@@ -85,7 +86,7 @@ export default defineComponent({
             router.push({name: 'Admin-Edit',params:{id:id}})
         }
         const  delArticle = (id:string) => {
-          console.log(id)
+            console.log(id)
             const ensure = confirm("請問是否要刪除這篇文章")
             if(ensure){
                 console.log(id)

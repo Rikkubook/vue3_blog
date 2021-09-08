@@ -47,7 +47,22 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter()
+    const login = ref(false);
 
+    onMounted( async () => {
+          firebase.auth().onAuthStateChanged(function(user:any) { 
+            // 不能丟到header? https://ithelp.ithome.com.tw/articles/10206354
+            if(user) {
+              console.log(user);
+              login.value = true;
+              console.log('login',true)
+            } else {
+              // 使用者未登入
+              login.value = false;
+              console.log('login',false)
+            }
+        })
+    })
     const signOut = () => {
       firebase.auth().signOut()
       .then(function() {
@@ -58,7 +73,7 @@ export default defineComponent({
       });
     }
 
-    return {signOut}
+    return {signOut, login}
   }
 })
 </script>
