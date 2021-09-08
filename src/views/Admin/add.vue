@@ -43,7 +43,7 @@ export default defineComponent({
         title: "" as string,
         date: 0 as number,
         content: "" as string,
-        id: "" as string | string[]
+        id: "" as string
       });
       const articles:any = reactive({data:[]});// 定義
 
@@ -57,16 +57,17 @@ export default defineComponent({
                 const db = firebase.database();
                 const msgRef = db.ref("messages");
                 await msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
+                console.log(Object.values(snapshot.val()));
                   articles.data = Object.values(snapshot.val())
                 })
                 // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
                 // await Articles.data.data.forEach( (data:ArticlesItem) => {
                 //     return articles.push(data);
                 // });
-                formData.title = articles.filter((art:ArticlesItem) => art.id === id)[0].title
-                formData.date = articles.filter((art:ArticlesItem) => art.id === id)[0].date
-                formData.content = articles.filter((art:ArticlesItem) => art.id === id)[0].content
-                formData.id = route.params.id
+                formData.title = articles.data.filter((art:ArticlesItem) => art.id === id)[0].title
+                formData.date = articles.data.filter((art:ArticlesItem) => art.id === id)[0].date
+                formData.content = articles.data.filter((art:ArticlesItem) => art.id === id)[0].content
+                formData.id = route.params.id as string
             } catch(error){
                 console.log(error)
             }
@@ -91,6 +92,8 @@ export default defineComponent({
       const addArticles = () => {
         const db = firebase.database();
         const msgRef = db.ref("messages");
+
+        
         const key = msgRef.push().key; //會用firebase 產生隨機的key
         formData.id = key
         msgRef.child(key).set(formData) //可以用child or 相對路徑

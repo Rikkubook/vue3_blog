@@ -21,7 +21,9 @@
 import { onMounted, reactive, ref, Ref, defineComponent } from 'vue'
 import SideBar from '../components/SideBar.vue'
 import axios from 'axios'
+import dayjs from 'dayjs'
 import { useRouter } from "vue-router"
+declare const firebase: any;
 
 export default defineComponent({
     name: 'Home',
@@ -33,11 +35,20 @@ export default defineComponent({
         onMounted( async () => {
             try{
 
-            let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
- 
-            data.data.data.forEach( (data: { content: string; }) => {
-                articles.push(data);
-            });
+            // let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
+            const db = firebase.database();
+            const msgRef = db.ref("articles");
+            
+            msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
+              Object.values(snapshot.val()).forEach( (data: any) => {
+                data.date = dayjs(data.date).format("YYYY/MM/DD");
+                articles.push(data)
+              })
+            })
+            // data.data.data.forEach( (data: any) => {
+            //   data.date = dayjs(data.date).format("YYYY/MM/DD");
+            //   articles.push(data);
+            // });
             
             } catch(error){
                 console.log(error);
