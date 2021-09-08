@@ -38,7 +38,7 @@ export default defineComponent({
     setup() {
       const route = useRoute()
       const router = useRouter()
-      const mode = ref<string>('add')
+      const mode = ref<string>('add') 
       const formData  = reactive({
         title: "" as string,
         date: 0 as number,
@@ -53,7 +53,6 @@ export default defineComponent({
             const id = route.params.id
             mode.value = 'edit'
             try{
-
                 const db = firebase.database();
                 const msgRef = db.ref("messages");
                 await msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
@@ -64,6 +63,7 @@ export default defineComponent({
                 // await Articles.data.data.forEach( (data:ArticlesItem) => {
                 //     return articles.push(data);
                 // });
+                console.log(articles)
                 formData.title = articles.data.filter((art:ArticlesItem) => art.id === id)[0].title
                 formData.date = articles.data.filter((art:ArticlesItem) => art.id === id)[0].date
                 formData.content = articles.data.filter((art:ArticlesItem) => art.id === id)[0].content
