@@ -25,38 +25,45 @@
       </button>
       <a v-if="mode ==='login' " href="javaScript:;" class="float-end" data-bs-toggle="modal" data-bs-target="#exampleModal">forgetPassword</a>
     </form>
-<!-- Button trigger modal -->
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="recipient-name" class="col-form-label">Email:</label>
-            <input type="email" class="form-control" id="recipient-name" v-model="forgetEmail">
+    <!-- Button trigger modal -->
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer pu-buttonsGroup">
-        <button type="button" class="btn btn-outline-primary pu-button" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary pu-button"  @click="forgetPassword()">Submit</button>
+          <div class="modal-body">
+            <form>
+              <div class="mb-3">
+                <label for="recipient-name" class="col-form-label">Email:</label>
+                <input type="email" class="form-control" id="recipient-name" v-model="forgetEmail">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer pu-buttonsGroup">
+            <button type="button" class="btn btn-outline-primary pu-button" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary pu-button"  @click="forgetPassword()">Submit</button>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
   </secction>
 </template>
 
 <script lang="ts">
 import { onMounted, ref, reactive, defineComponent, watch  } from 'vue'
 import { useRouter, useRoute } from "vue-router";
+import { notify } from "@kyvg/vue3-notification";
 
 declare const firebase: any;
 declare const bootstrap: any;
+
+notify({
+  type: 'success',
+  title: "註冊成功🎉",
+  duration: 20000
+});
 
 export default defineComponent({
   // defineComponent
@@ -91,7 +98,11 @@ export default defineComponent({
       if (mode.value==='register'){
           firebase.auth().createUserWithEmailAndPassword(form.email, form.password).then((result:object) => {
           console.log(result)
-          alert('註冊成功')
+          // alert('註冊成功')
+          // notify({
+          //   type: 'success',
+          //   title: "註冊成功🎉",
+          // });
         }).catch(function(error: { status: number, message: string }) {
           console.log(error.message)
           alert(error.message)

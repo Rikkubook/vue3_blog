@@ -54,15 +54,12 @@ export default defineComponent({
             mode.value = 'edit'
             try{
                 const db = firebase.database();
-                const msgRef = db.ref("messages");
+                const msgRef = db.ref("articles");
                 await msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
                 console.log(Object.values(snapshot.val()));
                   articles.data = Object.values(snapshot.val())
                 })
-                // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-                // await Articles.data.data.forEach( (data:ArticlesItem) => {
-                //     return articles.push(data);
-                // });
+
                 console.log(articles)
                 formData.title = articles.data.filter((art:ArticlesItem) => art.id === id)[0].title
                 formData.date = articles.data.filter((art:ArticlesItem) => art.id === id)[0].date
@@ -85,13 +82,13 @@ export default defineComponent({
       }
       const updateArticles = () =>{
         const db = firebase.database();
-        const msgRef = db.ref(`messages/${route.params.id}`); // update 修改
+        const msgRef = db.ref(`articles/${route.params.id}`); // update 修改
         msgRef.update(formData)
         router.push({name: 'Admin-Home'})
       }
       const addArticles = () => {
         const db = firebase.database();
-        const msgRef = db.ref("messages");
+        const msgRef = db.ref("articles");
 
         
         const key = msgRef.push().key; //會用firebase 產生隨機的key

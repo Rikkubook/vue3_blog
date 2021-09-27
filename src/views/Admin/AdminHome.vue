@@ -59,7 +59,7 @@ export default defineComponent({
                 // const user = firebase.auth().currentUser;
                 // console.log(user.email)
                 const db = firebase.database();
-                const msgRef = db.ref("messages");
+                const msgRef = db.ref("articles");
                 // msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
                 //   Object.values(snapshot.val()).forEach((item)=>{
                 //     console.log(item);
@@ -91,7 +91,7 @@ export default defineComponent({
             if(ensure){
                 console.log(id)
                 const db = firebase.database();
-                const msgRef =  db.ref(`messages/${id}`)
+                const msgRef =  db.ref(`articles/${id}`)
                 msgRef.remove()
                 // articles.splice(0, articles.length); //不會取代掉
             }
