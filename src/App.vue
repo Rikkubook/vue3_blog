@@ -1,8 +1,6 @@
 <template>
   <Header v-if="firebaseInit"></Header>
-  <!-- <HelloWorld msg="Hello Vue 3 + TypeScript + Vite" />
-  <h1 class="red-color">erwerewr</h1> -->
-  <!-- <router-link class="nav-link" to="/login">Login</router-link> -->
+  <Overlay :loading="loading"></Overlay>
   <notifications />
   <router-view />
 </template>
@@ -10,16 +8,20 @@
 <script lang="ts">
 import { onMounted, ref, defineComponent } from 'vue'
 import Header from './components/Header.vue'
+import Overlay from './components/Overlay.vue'
 
 declare const firebase: any;
 
 export default defineComponent({
   name: 'App',
   components: {
-    Header
+    Header,
+    Overlay
   },
     setup() {
       const firebaseInit = ref<boolean>(false)
+      const loading = ref<boolean>(true)
+
       onMounted( async () => {
           // 初始化 Firebase
           var config = {
@@ -38,7 +40,8 @@ export default defineComponent({
           //storage 開始
           //……………………………………………………………………..
       });
-      return {firebaseInit}
+
+      return {firebaseInit, loading}
     }
 })
 </script>
@@ -56,8 +59,8 @@ export default defineComponent({
   color: #ffffff;
 
   // default (blue)
-  background: #44a4fc;
-  border-left: 5px solid #187fe7;
+  background: #84c4ff;
+  border-left: 5px solid #67b2fc;
 
   // types (green, amber, red)
   &.success {
