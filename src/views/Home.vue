@@ -30,9 +30,13 @@ export default defineComponent({
     components: {
       SideBar
     },
-    setup() {
+    props: {
+      loading: Boolean
+    },
+    emits:['change-load'],
+    setup (props, {emit}) {
         const articles:any = reactive([]);
-        onMounted( async () => {
+        onMounted(() => {
             try{
 
             // let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
@@ -44,7 +48,9 @@ export default defineComponent({
                 data.date = dayjs(data.date).format("YYYY/MM/DD");
                 articles.push(data)
               })
+              
             })
+            emit('change-load', false)
             // data.data.data.forEach( (data: any) => {
             //   data.date = dayjs(data.date).format("YYYY/MM/DD");
             //   articles.push(data);

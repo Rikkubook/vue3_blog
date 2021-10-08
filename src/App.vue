@@ -2,7 +2,7 @@
   <Header v-if="firebaseInit"></Header>
   <Overlay :loading="loading"></Overlay>
   <notifications />
-  <router-view />
+  <router-view :loading="loading" @change-load="changeLoad" />
 </template>
 
 <script lang="ts">
@@ -41,7 +41,11 @@ export default defineComponent({
           //……………………………………………………………………..
       });
 
-      return {firebaseInit, loading}
+      const changeLoad = ((updateSatus)=>{
+        loading.value = updateSatus
+      })
+
+      return {firebaseInit, loading, changeLoad}
     }
 })
 </script>

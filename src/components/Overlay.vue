@@ -1,5 +1,12 @@
 <template>
-  <div class="pu-overlay" :show="loading">
+  <div class="pu-overlay" v-show="true">
+    <h1>Loading...</h1>
+    <div class="slider">
+      <div class="line"></div>
+      <div class="break dot1"></div>
+      <div class="break dot2"></div>
+      <div class="break dot3"></div>
+    </div>
   </div>
 </template>
 
