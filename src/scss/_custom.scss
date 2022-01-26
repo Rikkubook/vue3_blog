@@ -31,11 +31,13 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255,255,255,0.5); /* Black background with opacity */
+  background-color: rgba(255,255,255,0.9); /* Black background with opacity */
   z-index: 1000; /* Specify a stack order in case you're using a different order for other elements */
   cursor: pointer; /* Add a pointer on hover */
   h1{
-    color:#4a8df8;
+    padding-top: 50px;
+    padding-left: 50px;
+    color:#556085;
     font-family: 'Raleway', cursive; 
     font-weight:100; 
     font-stretch:normal;
@@ -43,6 +45,7 @@
     
   }
   .slider{
+    padding-left: 50px;
     position:absolute;
     width:400px;
     height:2px;
@@ -50,14 +53,14 @@
   }
   .line{
     position:absolute;
-    background:#4a8df8;
+    background:#556085;
     width:400px;
     height:2px;
     
   }
   .break{
     position:absolute;
-    background:#222;
+    background:rgba(255,255,255,0.9); 
     width:6px;
     height:2px;  
   }

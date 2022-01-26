@@ -1,5 +1,5 @@
 <template>
-  <div class="pu-overlay" v-show="true">
+  <div class="pu-overlay" v-show="loading">
     <h1>Loading...</h1>
     <div class="slider">
       <div class="line"></div>

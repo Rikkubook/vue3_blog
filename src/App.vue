@@ -41,7 +41,7 @@ export default defineComponent({
           //……………………………………………………………………..
       });
 
-      const changeLoad = ((updateSatus)=>{
+      const changeLoad = ((updateSatus: boolean) =>{
         loading.value = updateSatus
       })
 

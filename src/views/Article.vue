@@ -27,8 +27,8 @@ interface ArticlesItem {
 }
 
 export default defineComponent({
-
-    setup() {
+    emits:['change-load'],
+    setup(props, {emit}) {
         const router = useRoute();
         
         const artId = router.params.id as string;
@@ -38,20 +38,20 @@ export default defineComponent({
             title: "",
             id: ""
         });
-        onMounted( async () => {
+        onMounted(() => {
 
             //先取得全部資料
             // let data = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
 
             const db = firebase.database();
             const msgRef = db.ref("articles");
-            
+            emit('change-load', true)
             msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
                 articles.date = dayjs(snapshot.val()[artId].date).format("YYYY/MM/DD");
                 articles.id = snapshot.val()[artId].id;
                 articles.content = snapshot.val()[artId].content;
                 articles.title = snapshot.val()[artId].title;
-            
+                emit('change-load', false)
             })
             // data.data.data.forEach( (dataItem: ArticlesItem) => {
             //     if(dataItem.id === artId){
