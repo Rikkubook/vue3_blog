@@ -4,17 +4,27 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: () => import('@/views/index.vue'),
+    component: () => import('@/views/Home.vue'),
   },
   {
-    path: '/hello',
-    name: 'Helloworld',
-    component: () => import('@/views/Login.vue'),
+    path: '/about',
+    name: 'About',
+    component: () => import('@/views/About.vue'),
+  },
+  {
+    path: '/article:id',
+    name: 'Article',
+    component: () => import('@/views/Article.vue'),
   },
   {
     path: '/login',
     name: 'Login',
-    component: () => import('@/views/Login.vue'),
+    component: () => import('@/views/login.vue'),
+  },
+  {
+    path: '/register',
+    name: 'Register',
+    component: () => import('@/views/login.vue'),
   },
   {
     path: '/admin',
@@ -25,8 +35,23 @@ const routes = [
         path: '',
         name: 'Admin-Home',
         component: () => import('@/views/Admin/AdminHome.vue'),
+      },
+      {
+        path: 'edit/:id',
+        name: 'Admin-Edit',
+        component: () => import('@/views/Admin/add.vue'),
+      },
+      {
+        path: 'add',
+        name: 'Admin-Add',
+        component: () => import('@/views/Admin/add.vue'),
       }
     ]
+  },
+  {
+    path: '/:catchAll(.*)',
+    name: 'NotFound404',
+    component: () => import('@/views/NotFound404.vue'),
   }
 ];
 

@@ -1,82 +1,112 @@
 <template>
-    <div>
+    <secction class="d-block  container">
         <table class="table">
             <thead>
                 <tr>
-                <th scope="col">編號</th>
-                <th scope="col">文章標題</th>
-                <th scope="col">文章內容</th>
-                <th scope="col">上傳日期</th>
-                <th scope="col">修改</th>
+                    <th width="30%">文章標題</th>
+                    <th width="45%">文章內容</th>
+                    <th width="15%">上傳日期</th>
+                    <th width="10%">修改</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(articleItem,index) in articles" :key="articleItem.id">
-                    <th scope="row">1</th>
+                <tr v-for="(articleItem,index) in articles.data" :key="articleItem.id">
                     <td>{{ articleItem.title }}</td>
                     <td>{{ subContent[index] }}</td>
-                    <td>{{ articleItem.date }}</td>
-                    <td>@mdo</td>
+                    <td>{{ dateFormatDash(articleItem.date) }}</td>
+                    <td>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-secondary" @click="editArticle(articleItem.id)">修改</button>
+                        <button type="button" class="btn btn-secondary" @click="delArticle(articleItem.id)">刪除</button>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
         </table>
-    </div>
+    </secction>
 </template>
 
 
-<script>
+<script lang="ts">
 // import{ mapState, mapActions} from 'vuex'
 import { onMounted, computed,  reactive, defineComponent } from 'vue'
+import { useRouter } from "vue-router"
+
 import axios from 'axios'
+import dayjs from 'dayjs'
+
+declare const firebase: any;
+
+interface ArticlesItem {
+    content: string
+}
+
+// https://stackoverflow.com/questions/34859406/typescript-push-not-available-on-interface-array
 
 export default defineComponent({
     setup() {
         const fields = reactive([
-                {key: 'title', label: '文章標題'},
-                {key: 'date', label: '上傳日期'},
-                {key: 'content', label: '文章內容'},
-                {key: 'id', label: '修改'}
+            {key: 'title', label: '文章標題'},
+            {key: 'date', label: '上傳日期'},
+            {key: 'content', label: '文章內容'},
+            {key: 'id', label: '修改'}
         ]);
-        // 方法
+        const articles:any = reactive({data:[]}); // 定義
+        const router = useRouter();
 
-        const articles = reactive([]);
         onMounted( async () => {
             try{
-                let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
-                Articles.data.data.forEach( (data) => {
-                    console.log(data.content.substring(0,150))
-                    articles.push(data);
-                });
-
+                // const user = firebase.auth().currentUser;
+                // console.log(user.email)
+                const db = firebase.database();
+                const msgRef = db.ref("articles");
+                // msgRef.on('value', (snapshot) =>{ // 帶出所有的資料
+                //   Object.values(snapshot.val()).forEach((item)=>{
+                //     console.log(item);
+                //     articles.push(item)
+                //   })
+                //   console.log(snapshot.val());
+                // })
+                msgRef.on('value', (snapshot:any) =>{ // 帶出所有的資料
+                    console.log(snapshot.val())
+                    articles.data = Object.values(snapshot.val())
+                })
+                // let Articles = await axios.get('https://us-central1-expressapi-8c039.cloudfunctions.net/app/article');
+                // Articles.data.data.forEach( (data:ArticlesItem) => {
+                //     // console.log(data.content.substring(0,150))
+                //     return articles.push(data);
+                // });
             } catch(error){
                 console.log(error);
             }
         });
 
-        const  editArticle =  function(id){
-            this.$router.push({name: 'Admin-Edit',params:{id:id}})
+
+        const  editArticle =  (id:string) => {
+            router.push({name: 'Admin-Edit',params:{id:id}})
         }
-        const  delArticle = function(id){
+        const  delArticle = (id:string) => {
+            console.log(id)
             const ensure = confirm("請問是否要刪除這篇文章")
             if(ensure){
-                this.deleteArticle(id)
+                console.log(id)
+                const db = firebase.database();
+                const msgRef =  db.ref(`articles/${id}`)
+                msgRef.remove()
+                // articles.splice(0, articles.length); //不會取代掉
             }
         }
         // filter
         const subContent = computed(() =>{  //TODO: 可以整合進API? 輸出時或是在拷貝一個來整理？
-            let contents = articles.map((item)=>{ return item.content.substring(0,80)+'...'})
+            let contents = articles.data.map((item:ArticlesItem) => {  return item.content?.substring(0,80)+'...'})
             return contents
         });
-        const toDate = computed((timstamp)=>{
-            const date = new Date(timstamp)
-            let Y =date.getYear();
-            let M =date.getMonth();
-            let D =date.getDay();
-            let H =(Array(2).join("0" )+ date.getHours()).slice(-2);
-            let min = (Array(2).join("0" )+ date.getMinutes()).slice(-2);
-            return `${Y}/${M}/${D} ${H}:${min}`
-        })
-    return {fields, articles, editArticle, delArticle, subContent, toDate};
+        // dayjs
+        const dateFormatDash = (date:number, format = 'YYYY-MM-DD') => {
+            return date ? dayjs(date).format(format): ''
+        }
+
+    return {fields, articles, editArticle, delArticle, dateFormatDash, subContent};
     }
 })
 </script>

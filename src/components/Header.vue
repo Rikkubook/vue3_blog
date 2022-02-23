@@ -8,16 +8,19 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 red">
           <li class="nav-item">
-            <router-link class="nav-link active" aria-current="page" to="/">Home</router-link>
+            <router-link class="nav-link" to="/">Home</router-link>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <router-link class="nav-link" to="/about">About</router-link>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Article</a>
+          <li v-show="login" class="nav-item">
+            <router-link class="nav-link" to="/admin">Admin</router-link>
           </li>
-          <li class="nav-item">
+          <li v-show="!login" class="nav-item">
             <router-link class="nav-link" to="/login">Login</router-link>
+          </li>
+          <li v-show="login" class="nav-item">
+            <a class="nav-link" href="javaScript:;" @click="signOut()">SignOut</a>
           </li>
         </ul>
         <form class="d-flex">
@@ -31,18 +34,52 @@
 
 <script lang="ts">
 // import { Navbar } from 'bootstrap'
-import { ref, Ref, defineComponent } from 'vue'
+import { onMounted, ref, defineComponent } from 'vue'
+import { useRouter, useRoute } from "vue-router";
+
+declare const firebase: any;
+
 export default defineComponent({
   name: 'Header',
   props: {
-    msg: {
-      type: String,
-      required: true
-    }
+    msg: String,
+    login: Boolean
   },
-  setup: () => {
-    const count:Ref<number> = ref(0)
-    return { count }
+  setup() {
+    const router = useRouter()
+    const login = ref(false);
+
+    onMounted( async () => {
+          firebase.auth().onAuthStateChanged(function(user:any) { 
+            // 不能丟到header? https://ithelp.ithome.com.tw/articles/10206354
+            if(user) {
+              console.log(user);
+              login.value = true;
+              console.log('login',true)
+            } else {
+              // 使用者未登入
+              login.value = false;
+              console.log('login',false)
+            }
+        })
+    })
+    const signOut = () => {
+      firebase.auth().signOut()
+      .then(function() {
+        // 登出後強制重整一次頁面
+        return router.push({name:"Home"})
+      }).catch(function(error: { status: number, message: string }) {
+        console.log(error.message)
+      });
+    }
+
+    return {signOut, login}
   }
 })
 </script>
+
+<style lang="scss">
+  .router-link-active{
+    color: #e3ded8;
+  }
+</style>
